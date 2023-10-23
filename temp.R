@@ -12,7 +12,10 @@ dte_formatter <- function(x) {
 }
 
 capitals <- read_capitals(as_sf = TRUE) %>%
-  mutate(code_muni = ifelse(code_muni == 2803203, 2800308, code_muni)) %>%
+  mutate(
+    code_muni = ifelse(code_muni == 2803203, 2800308, code_muni),
+    name_muni = ifelse(code_muni == 2800308, "Aracaju", name_muni)
+  ) %>%
   sf::st_drop_geometry()
 
 br_grid <- br_states_grid1 %>%
@@ -35,7 +38,8 @@ ggplot(data = temp, aes(x = date, y = value, group = year, color = year)) +
   scale_colour_viridis_c(option = "B") +
   facet_geo(~abbrev_state, grid = br_grid, label = "name") +
   theme_bw() +
-  theme(legend.position = "bottom", legend.direction = "horizontal") +
+  theme(legend.position = "bottom", legend.direction = "horizontal",
+        panel.grid.minor = element_blank()) +
   labs(x = "Month", y = "Mean temperature (K)", color = "Year")
 
 ggsave(filename = "temp_capitals.pdf", width = 210, height = 297, units = "mm")
