@@ -5,7 +5,7 @@ library(scales)
 
 options(scipen=100)
 
-surf <- open_dataset(sources = "surface_pressure_mean.parquet") %>%
+surf <- open_dataset(sources = "../brclim2/output_data/parquet/surface_pressure_mean.parquet") %>%
   filter(date == as.Date("2022-01-01")) %>%
   filter(name == "surface_pressure_mean_count") %>%
   collect()
@@ -23,7 +23,14 @@ surf %>%
   tally()
 
 surf %>%
-  filter(value > 1) %>%
+  filter(value > 1 & value <= 10) %>%
+  tally()
+
+surf %>%
+  filter(value > 10 & value <= 100) %>%
   tally()
 
 
+surf %>%
+  filter(value > 100) %>%
+  tally()
